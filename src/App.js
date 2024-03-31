@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { Route, Routes,  } from "react-router-dom";
+import Login from "./pages/login";
+import { useDispatch, useSelector } from "react-redux";
+import UserDashBoard from "./pages/user-dashboard";
+import AdminDashboard from "./pages/admin-dashboard";
+import NotFound from "./pages/notfound";
+import { setIsAdminLogIn, setIsUserLogIn } from "./redux/productSlice";
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch();
+  const isAdminLogIn = useSelector((state) => state.productslice.isAdminLogIn);
+  const isUserLogIn = useSelector((state) => state.productslice.isUserLogIn);
+
+  useEffect(() => {
+    const user = localStorage.getItem("email");
+    if (user === "admin@admin.com") {
+      dispatch(setIsAdminLogIn(true));
+    } else if (user === "user@user.com") {
+      dispatch(setIsUserLogIn(true));
+    }
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <Routes>
+          {!isUserLogIn && <Route path="/" exact element={<Login />}></Route>}
+          {isUserLogIn && (
+            <Route path="/userdashboard" exact element={<UserDashBoard />} />
+          )}
+          {isAdminLogIn && (
+            <Route path="/admindashboard" exact element={<AdminDashboard />} />
+          )}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+    </>
   );
-}
+};
 
 export default App;
