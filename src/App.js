@@ -9,7 +9,7 @@ import { setIsAdminLogIn, setIsUserLogIn } from "./redux/productSlice";
 
 const App = () => {
   const dispatch = useDispatch();
-  const isAdminLogIn = useSelector((state) => state.productslice.isAdminLogIn);
+  // const isAdminLogIn = useSelector((state) => state.productslice.isAdminLogIn);
   const isUserLogIn = useSelector((state) => state.productslice.isUserLogIn);
 
   useEffect(() => {
